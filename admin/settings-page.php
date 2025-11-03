@@ -132,13 +132,17 @@ function tw_settings_field_image_size_callback() {
  * 6. Sanitization function to make sure our saved data is clean and secure.
  */
 function tw_settings_sanitize( $input ) {
-    $sanitized_output = [];
+    // Start with the existing saved options, so we don't erase other settings in the future.
+    $existing_options = get_option( 'tw_display_settings', [] );
+    $sanitized_output = $existing_options;
+
     $allowed_sizes = [ 'thumbnail', 'medium', 'large', 'full' ];
 
     // Sanitize the play poster detail size.
     if ( ! empty( $input['play_poster_detail_size'] ) ) {
         $submitted_size = $input['play_poster_detail_size'];
         if ( in_array( $submitted_size, $allowed_sizes, true ) ) {
+            // Correctly save it to the array.
             $sanitized_output['play_poster_detail_size'] = $submitted_size;
         }
     }
